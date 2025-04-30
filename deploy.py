@@ -3,7 +3,7 @@ import subprocess
 
 # --- Hardcoded Databricks host and token ---
 DATABRICKS_HOST = "https://dbc-5f99fc48-0975.cloud.databricks.com"
-DATABRICKS_TOKEN = "dapiee6e44bd23367fa14cb92cc95cf048cb"  # Replace with your token
+DATABRICKS_TOKEN = "dapiee6e44bd23367fa14cb92cc95cf048cb" 
 # -------------------------------------------
 
 JOB_FILE = "bundle/jobs/sample-job.json"

@@ -1,25 +1,27 @@
-version: 0.2
-
 phases:
   install:
     runtime-versions:
       python: 3.10
     commands:
       - echo Installing dependencies...
+      - pip install --upgrade pip
       - pip install -r requirements.txt
       - pip install databricks-cli databricks-sdk
+      - export PATH=$PATH:/root/.local/bin
+      - echo Verifying Databricks CLI...
+      - which databricks
 
-  pre_build:
-    commands:
-      - echo Logging into Databricks...
-      - export DATABRICKS_TOKEN="dapiee6e44bd23367fa14cb92cc95cf048cb"
-      - export DATABRICKS_HOST="https://dbc-5f99fc48-0975.cloud.databricks.com"
+#   pre_build:
+#     commands:
+#       - echo Logging into Databricks...
+#       - export DATABRICKS_TOKEN="dapiee6e44bd23367fa14cb92cc95cf048cb"
+#       - export DATABRICKS_HOST="https://dbc-5f99fc48-0975.cloud.databricks.com"
 
-  build:
-    commands:
-      - echo Deploying asset bundle to Databricks...
-      - python deploy.py
+#   build:
+#     commands:
+#       - echo Deploying asset bundle to Databricks...
+#       - python deploy.py
 
-artifacts:
-  files:
-    - '**/*'
+# artifacts:
+#   files:
+#     - '**/*'
