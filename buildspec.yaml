@@ -12,3 +12,18 @@ phases:
       - export PATH=$PATH:/root/.local/bin
       - echo Verifying Databricks CLI...
       - which databricks
+      
+  pre_build:
+    commands:
+      - echo Logging into Databricks...
+      - export DATABRICKS_TOKEN="dapiee6e44bd23367fa14cb92cc95cf048cb"
+      - export DATABRICKS_HOST="https://dbc-5f99fc48-0975.cloud.databricks.com"
+
+  build:
+    commands:
+      - echo Deploying asset bundle to Databricks...
+      - python deploy.py
+
+artifacts:
+  files:
+    - '**/*'
