@@ -5,30 +5,23 @@ phases:
     runtime-versions:
       python: 3.10
     commands:
-      - echo "Upgrading pip and installing dependencies..."
       - pip install --upgrade pip
-      - pip install databricks-cli databricks-sdk jq
-      - export PATH=$PATH:/root/.local/bin
+      - pip install databricks-cli databricks-sdk
 
   build:
     commands:
-      - echo "Setting up Databricks CLI credentials..."
-      - mkdir -p ~/.databricks
-      - |
-        cat <<EOF > ~/.databricks/config
-        [DEFAULT]
-        host = https://dbc-5f99fc48-0975.cloud.databricks.com
-        token = dapie6e44bd23367fa14cb92cc95cf048cb
-        EOF
-
+      - echo "Setting environment variables for Databricks CLI..."
+      - export DATABRICKS_HOST=https://dbc-5f99fc48-0975.cloud.databricks.com
+      - export DATABRICKS_TOKEN=dapie6e44bd23367fa14cb92cc95cf048cb
+      
       - echo "Uploading script to DBFS..."
       - databricks fs cp bundle/jobs/my_script.py dbfs:/scripts/my_script.py --overwrite
-
+      
       - echo "Creating or updating the Databricks job..."
       - databricks jobs create --json-file bundle/jobs/sample-job.json || echo "Job may already exist"
-
+      
       - echo "Triggering the Databricks job run..."
-      - JOB_ID=$(databricks jobs list --output JSON | jq -r '.jobs[] | select(.settings.name=="intermediate-etl-job") | .job_id')
+      - JOB_ID=$(databricks jobs list --output json | jq -r '.jobs[] | select(.settings.name=="intermediate-etl-job") | .job_id')
       - databricks jobs run-now --job-id $JOB_ID
 
 artifacts:
