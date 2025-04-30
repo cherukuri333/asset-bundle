@@ -8,18 +8,22 @@ phases:
       - pip install --upgrade pip
       - pip install databricks-cli databricks-sdk
 
+phases:
   build:
     commands:
       - echo "Setting environment variables for Databricks CLI..."
       - export DATABRICKS_HOST=https://dbc-5f99fc48-0975.cloud.databricks.com
       - export DATABRICKS_TOKEN=dapie6e44bd23367fa14cb92cc95cf048cb
-      
+
+      - echo "Checking if my_etl_job.py exists..."
+      - if [ -f my_etl_job.py ]; then echo "File found"; else echo "Error: File not found"; exit 1; fi
+
       - echo "Uploading script to DBFS..."
       - databricks fs cp my_etl_job.py dbfs:/scripts/etl_job.py --overwrite
-      
+
       - echo "Creating or updating the Databricks job..."
       - databricks jobs create --json-file bundle/jobs/sample-job.json || echo "Job may already exist"
-      
+
       - echo "Triggering the Databricks job run..."
       - JOB_ID=$(databricks jobs list --output json | jq -r '.jobs[] | select(.settings.name=="intermediate-etl-job") | .job_id')
       - databricks jobs run-now --job-id $JOB_ID
