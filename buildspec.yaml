@@ -12,7 +12,7 @@ phases:
       - export PATH=$PATH:/root/.local/bin
       - echo Verifying Databricks CLI...
       - which databricks
-      
+
   pre_build:
     commands:
       - echo Logging into Databricks...
@@ -27,3 +27,28 @@ phases:
 artifacts:
   files:
     - '**/*'
+
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.10
+    commands:
+      - pip install databricks-cli databricks-sdk --upgrade
+      - export PATH=$PATH:/root/.local/bin
+
+  build:
+    commands:
+      - echo "Setting up Databricks CLI credentials..."
+      - databricks configure --host https://dbc-5f99fc48-0975.cloud.databricks.com --token dapiee6e44bd23367fa14cb92cc95cf048cb <<< $'\n'
+      
+      - echo "Uploading ETL job script to DBFS..."
+      - databricks fs cp etl_job.py dbfs:/scripts/etl_job.py --overwrite
+
+      - echo "Creating or updating the Databricks job..."
+      - databricks jobs create --json-file job_config.json || echo "Job may already exist"
+
+      - echo "Triggering the job run..."
+      - JOB_ID=$(databricks jobs list --output JSON | jq -r '.jobs[] | select(.settings.name=="intermediate-etl-job") | .job_id')
+      - databricks jobs run-now --job-id $JOB_ID

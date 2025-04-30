@@ -1,0 +1,7 @@
+{
+    "name": "intermediate-etl-job",
+    "existing_cluster_id": "YOUR_CLUSTER_ID",
+    "spark_python_task": {
+      "python_file": "dbfs:/scripts/etl_job.py"
+    }
+  }
