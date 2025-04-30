@@ -15,7 +15,7 @@ phases:
       - export DATABRICKS_TOKEN=dapie6e44bd23367fa14cb92cc95cf048cb
       
       - echo "Uploading script to DBFS..."
-      - databricks fs cp my_etl_job.py dbfs:/scripts/my_script.py --overwrite
+      - databricks fs cp my_etl_job.py dbfs:/scripts/etl_job.py --overwrite
       
       - echo "Creating or updating the Databricks job..."
       - databricks jobs create --json-file bundle/jobs/sample-job.json || echo "Job may already exist"
