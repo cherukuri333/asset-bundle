@@ -1,0 +1,14 @@
+{
+    "name": "sample-job",
+    "new_cluster": {
+      "spark_version": "12.2.x-scala2.12",
+      "node_type_id": "i3.xlarge",
+      "num_workers": 2
+    },
+    "spark_python_task": {
+      "python_file": "dbfs:/scripts/my_script.py"
+    },
+    "email_notifications": {},
+    "timeout_seconds": 3600,
+    "max_retries": 1
+  }
